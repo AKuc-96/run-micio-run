@@ -13,7 +13,8 @@ public class BossMovement : MonoBehaviour
     [SerializeField] private float retreatTargetX = 20f;
 
     private Rigidbody2D bossRB;
-    private bool isRetreating = false;
+    private bool isRetreating = false; 
+    public bool hasStopped = false;
 
 
     void Start()
@@ -36,19 +37,32 @@ public class BossMovement : MonoBehaviour
 
             if (transform.position.x >= retreatTargetX)
             {
-                Debug.Log("Босс успешно удрал. Клон уничтожен.");
+                Debug.Log("Босс успешно удрал. Клон уничтожен."); 
+
+                if (LevelManager.Instance != null)
+                {
+                    LevelManager.Instance.ChangePhase(GamePhase.PostBoss);
+                }
+
                 Destroy(gameObject);
             }
 
             return;
         }
 
-        bossRB.linearVelocity = Vector3.left * bossSpeed; 
-
-        if (Vector3.Distance(transform.position, stopAt) < 0.1f)
+        if (!hasStopped)
         {
-            bossSpeed = 0f;
+            bossRB.linearVelocity = Vector3.left * bossSpeed; 
+
+            if (Vector3.Distance(transform.position, stopAt) < 0.1f)
+            {
+                bossRB.linearVelocity = Vector2.zero; 
+                transform.position = stopAt; 
+                hasStopped = true;
+            }
+            
         }
+
         
     }
 

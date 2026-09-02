@@ -43,7 +43,7 @@ public class BossShooting : MonoBehaviour
         if (bossMovement == null) bossMovement = GetComponent<BossMovement>();
             if (bossMovement == null) return;
             
-        if (bossMovement.bossSpeed == 0f)
+        if (bossMovement.hasStopped)
             {
                 if (Time.time >= nextFireTime)
                     {
