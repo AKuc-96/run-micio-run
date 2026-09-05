@@ -2,10 +2,11 @@ using UnityEngine;
 
 public enum GamePhase
     {
-        Warmup, 
-        PreBoss, 
-        BossFight, 
-        PostBoss, 
-        FinalRun, 
-        Victory
+    Warmup,
+    FirstBoss,
+    FirstPostBoss,
+    SecondBoss,
+    FinalRun,
+    ThirdBoss,
+    Victory
     }

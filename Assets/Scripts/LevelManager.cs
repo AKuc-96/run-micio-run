@@ -1,6 +1,4 @@
 using System;
-using System.Net.NetworkInformation;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -8,10 +6,12 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
 
     [Header("Timer settings")]
-    [SerializeField] private float warmupDuration = 5f; 
-    [SerializeField] private float preBossDuration = 30f; 
-    [SerializeField] private float postBossDuration = 5f; 
-    [SerializeField] private float finalRunDuration = 15f;
+    [SerializeField] private float warmupDuration = 60f; 
+    [SerializeField] private float firstBossDuration = 30f; 
+    [SerializeField] private float firstPostBossDuration = 90f;
+    [SerializeField] private float secondBossDuration = 30f;
+    [SerializeField] private float finalRunDuration = 60f; 
+    [SerializeField] private float thirdBossDuration = 30f;
 
     public GamePhase CurrentPhase { get; private set; }
     public float CurrentPhaseTimeRemaining { get; private set; }
@@ -48,7 +48,7 @@ public class LevelManager : MonoBehaviour
 
     private void UpdatePhaseTimer()
     {
-        if (CurrentPhase == GamePhase.BossFight || CurrentPhase == GamePhase.Victory)
+        if (CurrentPhase == GamePhase.Victory)
             return;
 
         if (CurrentPhaseTimeRemaining > 0)
@@ -81,15 +81,21 @@ public class LevelManager : MonoBehaviour
         switch (CurrentPhase)
         {
             case GamePhase.Warmup: 
-                ChangePhase(GamePhase.PreBoss);
+                ChangePhase(GamePhase.FirstBoss);
                 break;
-            case GamePhase.PreBoss:
-                ChangePhase(GamePhase.BossFight);
+            case GamePhase.FirstBoss:
+                ChangePhase(GamePhase.FirstPostBoss);
                 break;
-            case GamePhase.PostBoss:
+            case GamePhase.FirstPostBoss:
+                ChangePhase(GamePhase.SecondBoss);
+                break;
+            case GamePhase.SecondBoss:
                 ChangePhase(GamePhase.FinalRun);
                 break;
             case GamePhase.FinalRun:
+                ChangePhase(GamePhase.ThirdBoss);
+                break;
+            case GamePhase.ThirdBoss:
                 ChangePhase(GamePhase.Victory);
                 break;
         }
@@ -100,9 +106,11 @@ public class LevelManager : MonoBehaviour
         return phase switch
         {
             GamePhase.Warmup => warmupDuration, 
-            GamePhase.PreBoss => preBossDuration, 
-            GamePhase.PostBoss => postBossDuration, 
+            GamePhase.FirstBoss => firstBossDuration, 
+            GamePhase.FirstPostBoss => firstPostBossDuration, 
+            GamePhase.SecondBoss => secondBossDuration,
             GamePhase.FinalRun => finalRunDuration, 
+            GamePhase.ThirdBoss => thirdBossDuration, 
             _ => 0f
         };
     }
