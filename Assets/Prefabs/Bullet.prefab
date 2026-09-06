@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3575253208995307963}
   - component: {fileID: 686024583427582835}
-  - component: {fileID: 7984958690154234156}
   - component: {fileID: -913104428402802587}
   - component: {fileID: -4177682988567318309}
+  - component: {fileID: -4825824290223364786}
   m_Layer: 8
   m_Name: Bullet
   m_TagString: Obstacle
@@ -90,20 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7984958690154234156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319382990311190931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e275d33c630a740b44f353471c6e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletSpeed: 5
-  bulletLifetime: 10
 --- !u!50 &-913104428402802587
 Rigidbody2D:
   serializedVersion: 5
@@ -167,3 +153,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &-4825824290223364786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319382990311190931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596e70c88faf5964aa52dbdb0e4fbfbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  destroyXPosition: -15
+  lifetime: 10
+  damageAmount: 1

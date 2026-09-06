@@ -148,6 +148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4174511306662111255}
   - component: {fileID: 3359675773590429324}
+  - component: {fileID: 9087883246951265966}
   m_Layer: 8
   m_Name: Projectile Obstacle
   m_TagString: Obstacle
@@ -198,3 +199,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 6
+--- !u!114 &9087883246951265966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6296097573971926800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596e70c88faf5964aa52dbdb0e4fbfbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  destroyXPosition: -15
+  lifetime: 10
+  damageAmount: 1

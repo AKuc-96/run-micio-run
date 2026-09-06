@@ -41,7 +41,7 @@ public class BossMovement : MonoBehaviour
 
                 if (LevelManager.Instance != null)
                 {
-                    LevelManager.Instance.ChangePhase(GamePhase.PostBoss);
+                    LevelManager.Instance.AdvanceToNextPhase();
                 }
 
                 Destroy(gameObject);

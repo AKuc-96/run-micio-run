@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4575086649861741792}
   - component: {fileID: 6849823271840067810}
+  - component: {fileID: -895614659805759714}
   m_Layer: 8
   m_Name: Spike Obstacle
   m_TagString: Obstacle
@@ -60,6 +61,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 6
+--- !u!114 &-895614659805759714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438687651538395395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596e70c88faf5964aa52dbdb0e4fbfbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  destroyXPosition: -15
+  lifetime: 10
+  damageAmount: 1
 --- !u!1 &2044349482166432114
 GameObject:
   m_ObjectHideFlags: 0

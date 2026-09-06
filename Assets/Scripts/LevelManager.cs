@@ -76,7 +76,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log($"[LevelManager] New phase: {CurrentPhase}");
     }
 
-    private void AdvanceToNextPhase()
+    public void AdvanceToNextPhase()
     {
         switch (CurrentPhase)
         {

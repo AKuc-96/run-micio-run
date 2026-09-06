@@ -78,9 +78,9 @@ public class BossShooting : MonoBehaviour
 
     private void ClearRemainingBullets()
     {
-        Bullet[] activeBullets = FindObjectsByType<Bullet>(FindObjectsSortMode.None);
+        MovableObject[] activeBullets = FindObjectsByType<MovableObject>(FindObjectsSortMode.None);
 
-        foreach (Bullet bullet in activeBullets)
+        foreach (MovableObject bullet in activeBullets)
         {
             Destroy(bullet.gameObject);
         }

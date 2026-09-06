@@ -71,9 +71,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 666400362004964427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e0caccb830fc1d4abca4f72a84ebc24, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dc5098616aba6a42a2dde254e13198d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  destroyXPosition: -15
+  lifetime: 10
+  livesToGive: 1
 --- !u!61 &1021946486553702588
 BoxCollider2D:
   m_ObjectHideFlags: 0
