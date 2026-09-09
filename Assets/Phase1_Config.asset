@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8bd0303782be8e499730c6aa2b00f36, type: 3}
+  m_Name: Phase1_Config
+  m_EditorClassIdentifier: 
+  spawnInterval: 2
+  obstaclePrefabs:
+  - {fileID: 6296097573971926800, guid: 4255b3450ab22cc49810675bd7d7614e, type: 3}
+  - {fileID: 1438687651538395395, guid: fc989e0006d0b864d9c830ece91a34a5, type: 3}
+  - {fileID: 5224596016916637521, guid: 32729f0b8f1b923448791352c044928e, type: 3}
+  bossPrefab: {fileID: 0}
+  phaseDuration: 60
