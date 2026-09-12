@@ -31,9 +31,21 @@ public class Spawner : MonoBehaviour
 
     public GameObject spawnedBoss;
     private bool isBossCreated = false; 
+
+    private PhaseConfig _currentPhase;
     
     private UnityEngine.Vector3 stopAt = new(6, -3, 0);
     
+    private void OnEnable()
+    {
+        LevelManager.OnPhaseChanged += HandlePhaseChanged;
+    }
+
+    private void OnDiasble()
+    {
+        LevelManager.OnPhaseChanged -= HandlePhaseChanged;
+    }
+
     private void Start()
     {
         GameManager.Instance.onGameOver.AddListener(ClearObstacles);
@@ -45,11 +57,11 @@ public class Spawner : MonoBehaviour
         {
             timeAlive += Time.deltaTime;
 
-            CalculateFactors();
+            //CalculateFactors();
             
             SpawnLoop(); 
 
-            BossSpawn(); 
+            //BossSpawn(); 
 
             ExtraLifeSpawn();
 
@@ -62,13 +74,16 @@ public class Spawner : MonoBehaviour
 
     private void SpawnLoop()
     {
-     timeUntilObstacleSpawn += Time.deltaTime;
+        if (_currentPhase == null || _currentPhase.IsBossPhase)
+            return;
+        
+        timeUntilObstacleSpawn += Time.deltaTime;
 
-     if (timeUntilObstacleSpawn >= _obstacleSpawnTime && countSpawn < 10)
-        {
-            Spawn(); 
-            timeUntilObstacleSpawn = 0f; 
-        } 
+        if (timeUntilObstacleSpawn >= _obstacleSpawnTime)
+            {
+                Spawn(); 
+                timeUntilObstacleSpawn = 0f; 
+            } 
     } 
 
     private void ExtraLifeSpawn()
@@ -126,6 +141,18 @@ public class Spawner : MonoBehaviour
         {
             Destroy(spawnedBoss);
         }
+    }
+
+    private void HandlePhaseChanged(PhaseConfig config)
+    {
+        _currentPhase = config;
+        _obstacleSpeed = config.ObstacleSpeed;
+        _obstacleSpawnTime = config.SpawnInterval; 
+        if (_currentPhase.IsBossPhase)
+        {
+            BossSpawn();
+        }
+        Debug.Log($"[Spawner] Применена фаза! Скорость: {_obstacleSpeed}, Интервал: {_obstacleSpawnTime}");
     }
 
     // private void Destroy(System.Func<GameObject> gameObject)

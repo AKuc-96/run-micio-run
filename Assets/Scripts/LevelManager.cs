@@ -13,7 +13,7 @@ public class LevelManager : MonoBehaviour
     public GamePhase CurrentPhase { get; private set; }
     public float CurrentPhaseTimeRemaining { get; private set; }
 
-    //public event Action<GamePhase> OnPhaseChanged; 
+    public static event Action<PhaseConfig> OnPhaseChanged; 
     public event Action<float> OnTimerUpdated; 
 
     private void Awake()
@@ -51,6 +51,8 @@ public class LevelManager : MonoBehaviour
     {
         currentPhaseIndex = index;
         PhaseConfig currentConfig = levelPhases[currentPhaseIndex];
+
+        OnPhaseChanged?.Invoke(currentConfig);
 
         CurrentPhaseTimeRemaining = currentConfig.PhaseDuration;
 

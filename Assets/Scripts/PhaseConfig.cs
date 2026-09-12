@@ -8,13 +8,18 @@ public class PhaseConfig : ScriptableObject
     [SerializeField] private GameObject[] obstaclePrefabs;
 
     [Header("Boss settings")]
-    [SerializeField] private GameObject bossPrefab;
+    [SerializeField] private GameObject bossPrefab; 
+    [SerializeField] private bool isBossPhase;
 
     [Header("Duration")]
-    [SerializeField] private float phaseDuration;
+    [SerializeField] private float phaseDuration; 
+
+    [SerializeField] private float obstacleSpeed = 5f;
 
     public float SpawnInterval => spawnInterval;
     public GameObject[] ObstaclePrefabs => obstaclePrefabs;
     public GameObject BossPrefab => bossPrefab;
-    public float PhaseDuration => phaseDuration;
+    public float PhaseDuration => phaseDuration; 
+    public float ObstacleSpeed => obstacleSpeed; 
+    public bool IsBossPhase => isBossPhase;
 }
