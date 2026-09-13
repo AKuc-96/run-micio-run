@@ -15,4 +15,6 @@ MonoBehaviour:
   spawnInterval: 0.75
   obstaclePrefabs: []
   bossPrefab: {fileID: 9095529636835523723, guid: bbd04675227c4314d921dd968412f48f, type: 3}
+  isBossPhase: 1
   phaseDuration: 30
+  obstacleSpeed: 5
