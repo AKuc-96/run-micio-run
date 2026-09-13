@@ -9,8 +9,8 @@ public class HealthSystem
     public int MaxLives { get; private set; }
     public int BonusCoins { get; private set; }
 
-    public UnityEvent<int> onHealthChanged = new (); 
-    public UnityEvent<int> onAddBonuses = new ();
+    public event Action<int> OnHealthChanged; 
+    public event Action<int> OnAddBonuses;
 
     public HealthSystem (int initialLives = 1, int maxLives = 9)
     {
@@ -21,7 +21,7 @@ public class HealthSystem
     public void ResetLives(int count)
     {
         CurrentLives = Mathf.Clamp(count, 0, MaxLives); 
-        onHealthChanged?.Invoke(CurrentLives);
+        OnHealthChanged?.Invoke(CurrentLives);
     }
 
     public void AddLife(int amount = 1)
@@ -45,12 +45,12 @@ public class HealthSystem
 
         if (healthChanged)
         {
-            onHealthChanged?.Invoke(CurrentLives);
+            OnHealthChanged?.Invoke(CurrentLives);
         }
 
         if (bonusesChanged)
         {
-            onAddBonuses?.Invoke(BonusCoins);
+            OnAddBonuses?.Invoke(BonusCoins);
         }
     }
 
@@ -58,6 +58,6 @@ public class HealthSystem
     {
         CurrentLives = Mathf.Max(0, CurrentLives - damage);
 
-        onHealthChanged?.Invoke(CurrentLives);
+        OnHealthChanged?.Invoke(CurrentLives);
     }
 }
