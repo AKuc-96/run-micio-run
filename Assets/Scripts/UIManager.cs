@@ -19,46 +19,55 @@ public class UIManager : MonoBehaviour
     private GameManager gm; 
     private HealthSystem hs;
 
+    private void OnEnable()
+    {
+        GameManager.onGameOver += ActivateGameOverUI;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.onGameOver -= ActivateGameOverUI;
+    }
     private void Start()
     {
-    gm = GameManager.Instance;
-    if (gm != null)
-    {
-        gm.onGameOver.AddListener(ActivateGameOverUI);    
-    }
+        gm = GameManager.Instance;
+        // if (gm != null)
+        // {
+            //gm.onGameOver += ActivateGameOverUI;    
+        // }
 
-    hs = HealthSystem.Instance;
-    if (hs != null)
-    {
-        hs.onHealthChanged.AddListener(UpdateLivesUI);
-        hs.onAddBonuses.AddListener(UpdateBonusesUI);
+        hs = HealthSystem.Instance;
+        if (hs != null)
+        {
+            hs.onHealthChanged.AddListener(UpdateLivesUI);
+            hs.onAddBonuses.AddListener(UpdateBonusesUI);
 
-        UpdateLivesUI(hs.CurrentLives);
-        UpdateBonusesUI(hs.BonusCoins);
+            UpdateLivesUI(hs.CurrentLives);
+            UpdateBonusesUI(hs.BonusCoins);
+        }
     }
-}
 
     private void Update()
-{
-    // Пока идет игра, обновляем плашку с очками
-    if (gm != null && gm.isPlaying)
     {
-        UpdateScoreUI(gm.PrettyScore());
+        // Пока идет игра, обновляем плашку с очками
+        if (gm != null && gm.isPlaying)
+        {
+            UpdateScoreUI(gm.PrettyScore());
+        }
     }
-}
 
     private void OnDestroy()
     {
-        if (gm != null)
-        {
-            gm.onGameOver.RemoveListener(ActivateGameOverUI);
-        } 
+        // if (gm != null)
+        // {
+            //gm.onGameOver -= ActivateGameOverUI;
+        // } 
 
         if (hs != null)
-    {
-        hs.onHealthChanged.RemoveListener(UpdateLivesUI);
-        hs.onAddBonuses.RemoveListener(UpdateLivesUI);
-    }
+        {
+            hs.onHealthChanged.RemoveListener(UpdateLivesUI);
+            hs.onAddBonuses.RemoveListener(UpdateLivesUI);
+        }
     }
     public void PlayButtonHandler()
     {

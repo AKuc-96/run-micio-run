@@ -22,7 +22,7 @@ public class BossShooting : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameManager.Instance.onGameOver.AddListener(ClearRemainingBullets);
+        GameManager.onGameOver += ClearRemainingBullets;
     }
 
     // Update is called once per frame
@@ -92,7 +92,7 @@ public class BossShooting : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.onGameOver.RemoveListener(ClearRemainingBullets);
+            GameManager.onGameOver -= ClearRemainingBullets;
         }
     }
 

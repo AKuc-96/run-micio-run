@@ -14,7 +14,22 @@ public class LevelManager : MonoBehaviour
     public float CurrentPhaseTimeRemaining { get; private set; }
 
     public static event Action<PhaseConfig> OnPhaseChanged; 
-    public event Action<float> OnTimerUpdated; 
+    public static event Action<float> OnTimerUpdated; 
+
+    private float _timePassed = 0f;
+    private bool _isPhaseActive = false; 
+
+    private void OnEnable()
+    {
+        GameManager.onPlay += StartLevel;
+        GameManager.onGameOver += StopLevel;
+    } 
+
+    private void OnDisable()
+    {
+        GameManager.onPlay -= StartLevel;
+        GameManager.onGameOver -= StopLevel;
+    }
 
     private void Awake()
     {
@@ -28,13 +43,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Update()
     {
-        StartLevel();
+        if (!_isPhaseActive)
+            return;
+        
+        _timePassed += Time.deltaTime;
+        if (_timePassed >= levelPhases[currentPhaseIndex].PhaseDuration)
+        {
+            AdvanceToNextPhase();
+        }
     }
 
     public void StartLevel()
     {
+        _isPhaseActive = true;
+        _timePassed = 0f;
         currentPhaseIndex = 0;
 
         if (levelPhases != null && levelPhases.Length > 0)
@@ -47,8 +71,14 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void StopLevel()
+    {
+        _isPhaseActive = false;
+    }
+
     private void SetPhase(int index)
     {
+        _timePassed = 0f;
         currentPhaseIndex = index;
         PhaseConfig currentConfig = levelPhases[currentPhaseIndex];
 
@@ -69,6 +99,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            StopLevel();
             Debug.Log("[LevelManager] Все фазы пройдены! Победа!");
         }
     }

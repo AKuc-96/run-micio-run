@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -32,9 +33,8 @@ public class GameManager : MonoBehaviour
     public Data data;
     public bool isPlaying = false; 
 
-    [Header("Events")]
-    public UnityEvent onPlay = new();
-    public UnityEvent onGameOver = new();
+    public static event Action onPlay;
+    public static event Action onGameOver;
 
     private void Start()
     {

@@ -48,8 +48,8 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.onGameOver.AddListener(ClearObstacles);
-        GameManager.Instance.onPlay.AddListener(ResetFactors);
+        GameManager.onGameOver += ClearObstacles;
+        GameManager.onPlay += ResetFactors;
     }
     private void Update()
     {
