@@ -16,7 +16,15 @@ public class BossMovement : MonoBehaviour
     private bool isRetreating = false; 
     public bool hasStopped = false;
 
+    private void OnEnable()
+    {
+        LevelManager.OnPhaseChanged += HandlePhaseChanged;
+    }
 
+    private void OnDisable()
+    {
+        LevelManager.OnPhaseChanged -= HandlePhaseChanged;
+    }
     void Start()
     {
         bossRB = GetComponent<Rigidbody2D>();
@@ -39,14 +47,8 @@ public class BossMovement : MonoBehaviour
             {
                 Debug.Log("Босс успешно удрал. Клон уничтожен."); 
 
-                if (LevelManager.Instance != null)
-                {
-                    LevelManager.Instance.AdvanceToNextPhase();
-                }
-
                 Destroy(gameObject);
             }
-
             return;
         }
 
@@ -62,8 +64,14 @@ public class BossMovement : MonoBehaviour
             }
             
         }
+    }
 
-        
+    private void HandlePhaseChanged(PhaseConfig newPhase)
+    {
+        if (!newPhase.IsBossPhase)
+        {
+            StartRetreat();
+        }
     }
 
     public void StartRetreat()
