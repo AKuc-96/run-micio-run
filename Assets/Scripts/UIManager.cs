@@ -19,13 +19,27 @@ public class UIManager : MonoBehaviour
     private GameManager gm; 
     private HealthSystem hs;
 
+    private void OnEnable()
+    {
+        GameManager.onGameOver += ActivateGameOverUI;
+        HealthSystem.onHealthChanged += UpdateLivesUI; 
+        HealthSystem.onAddBonuses += UpdateBonusesUI;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.onGameOver -= ActivateGameOverUI; 
+        HealthSystem.onHealthChanged -= UpdateLivesUI;
+        HealthSystem.onAddBonuses -= UpdateBonusesUI;
+    }
     private void Start()
     {
         gm = GameManager.Instance;
-        if (gm != null)
-        {
-            gm.onGameOver.AddListener(ActivateGameOverUI);    
-        }
+        // if (gm != null)
+        // {
+            //gm.onGameOver += ActivateGameOverUI;    
+        // }
+        gm = GameManager.Instance;
 
         hs = HealthSystem.Instance;
         if (hs != null)
@@ -33,9 +47,12 @@ public class UIManager : MonoBehaviour
             UpdateLivesUI(hs.CurrentLives);
             UpdateBonusesUI(hs.BonusCoins);
         }
-        
-        hs.OnHealthChanged += UpdateLivesUI;
-        hs.OnAddBonuses += UpdateBonusesUI;
+        hs = HealthSystem.Instance;
+        if (hs != null)
+        {
+            UpdateLivesUI(hs.CurrentLives);
+            UpdateBonusesUI(hs.BonusCoins);
+        }
     }
 
     private void Update()
@@ -45,17 +62,17 @@ public class UIManager : MonoBehaviour
         {
             UpdateScoreUI(gm.PrettyScore());
         }
+        
+        // Пока идет игра, обновляем плашку с очками
+        if (gm != null && gm.isPlaying)
+        {
+            UpdateScoreUI(gm.PrettyScore());
+        }
     }
 
     private void OnDestroy()
     {
-        if (gm != null)
-        {
-            gm.onGameOver.RemoveListener(ActivateGameOverUI);
-        } 
-
-        hs.OnHealthChanged -= UpdateLivesUI;
-        hs.OnAddBonuses -= UpdateBonusesUI;
+        
     }
     public void PlayButtonHandler()
     {

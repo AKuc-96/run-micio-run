@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -32,9 +33,8 @@ public class GameManager : MonoBehaviour
     public Data data;
     public bool isPlaying = false; 
 
-    [Header("Events")]
-    public UnityEvent onPlay = new();
-    public UnityEvent onGameOver = new();
+    public static event Action onPlay;
+    public static event Action onGameOver;
 
     private void Start()
     {
@@ -46,6 +46,16 @@ public class GameManager : MonoBehaviour
         else
             data = new Data();
     }
+
+    private void OnEnable()
+    {
+        LevelManager.OnPhaseChanged += HandlePhaseChanged;
+    }
+
+    private void OnDisable()
+    {
+        LevelManager.OnPhaseChanged -= HandlePhaseChanged;
+    } 
 
     private void Update()
     {
@@ -64,6 +74,14 @@ public class GameManager : MonoBehaviour
         }
 
         onPlay.Invoke();
+    }
+
+    internal void HandlePhaseChanged(PhaseConfig newPhase)
+    {
+        if (newPhase.SpawnInterval <= 0f && !newPhase.IsBossPhase)
+        {
+            isPlaying = false;
+        }
     }
 
     public void GameOver()

@@ -5,19 +5,31 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
-    [Header("Timer settings")]
-    [SerializeField] private float warmupDuration = 60f; 
-    [SerializeField] private float firstBossDuration = 30f; 
-    [SerializeField] private float firstPostBossDuration = 90f;
-    [SerializeField] private float secondBossDuration = 30f;
-    [SerializeField] private float finalRunDuration = 60f; 
-    [SerializeField] private float thirdBossDuration = 30f;
+    [Header("Phase settings")]
+    [SerializeField] private PhaseConfig[] levelPhases;
+
+    private int currentPhaseIndex = 0;
 
     public GamePhase CurrentPhase { get; private set; }
     public float CurrentPhaseTimeRemaining { get; private set; }
 
-    public event Action<GamePhase> OnPhaseChanged; 
-    public event Action<float> OnTimerUpdated; 
+    public static event Action<PhaseConfig> OnPhaseChanged; 
+    public static event Action<float> OnTimerUpdated; 
+
+    private float _timePassed = 0f;
+    private bool _isPhaseActive = false; 
+
+    private void OnEnable()
+    {
+        GameManager.onPlay += StartLevel;
+        GameManager.onGameOver += StopLevel;
+    } 
+
+    private void OnDisable()
+    {
+        GameManager.onPlay -= StartLevel;
+        GameManager.onGameOver -= StopLevel;
+    }
 
     private void Awake()
     {
@@ -31,87 +43,64 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        StartLevel();
-    }
-
     private void Update()
     {
-        UpdatePhaseTimer();
+        if (!_isPhaseActive)
+            return;
+        
+        _timePassed += Time.deltaTime;
+        if (_timePassed >= levelPhases[currentPhaseIndex].PhaseDuration)
+        {
+            AdvanceToNextPhase();
+        }
     }
 
     public void StartLevel()
     {
-        ChangePhase(GamePhase.Warmup);
-    }
+        _isPhaseActive = true;
+        _timePassed = 0f;
+        currentPhaseIndex = 0;
 
-    private void UpdatePhaseTimer()
-    {
-        if (CurrentPhase == GamePhase.Victory)
-            return;
-
-        if (CurrentPhaseTimeRemaining > 0)
+        if (levelPhases != null && levelPhases.Length > 0)
         {
-            CurrentPhaseTimeRemaining -= Time.deltaTime;
-            OnTimerUpdated?.Invoke(CurrentPhaseTimeRemaining);
-
-            if (CurrentPhaseTimeRemaining <= 0)
-            {
-                CurrentPhaseTimeRemaining = 0;
-                OnTimerUpdated?.Invoke(CurrentPhaseTimeRemaining);
-                AdvanceToNextPhase();
-            }
+            SetPhase(currentPhaseIndex);
+        }
+        else
+        {
+            Debug.LogError("[LevelManager] Массив levelPhases пуст!");
         }
     }
 
-    public void ChangePhase(GamePhase newPhase)
+    public void StopLevel()
     {
-        CurrentPhase = newPhase;
-        CurrentPhaseTimeRemaining = GetDurationForPhase(newPhase);
+        _isPhaseActive = false;
+    }
 
-        OnPhaseChanged?.Invoke(CurrentPhase);
+    private void SetPhase(int index)
+    {
+        _timePassed = 0f;
+        currentPhaseIndex = index;
+        PhaseConfig currentConfig = levelPhases[currentPhaseIndex];
+
+        OnPhaseChanged?.Invoke(currentConfig);
+
+        CurrentPhaseTimeRemaining = currentConfig.PhaseDuration;
+
         OnTimerUpdated?.Invoke(CurrentPhaseTimeRemaining);
 
-        Debug.Log($"[LevelManager] New phase: {CurrentPhase}");
+        Debug.Log($"[LevelManager] Запущена фаза {currentPhaseIndex + 1}/{levelPhases.Length}: {currentConfig.name}");
     }
 
     public void AdvanceToNextPhase()
     {
-        switch (CurrentPhase)
+        if (currentPhaseIndex + 1 < levelPhases.Length)
         {
-            case GamePhase.Warmup: 
-                ChangePhase(GamePhase.FirstBoss);
-                break;
-            case GamePhase.FirstBoss:
-                ChangePhase(GamePhase.FirstPostBoss);
-                break;
-            case GamePhase.FirstPostBoss:
-                ChangePhase(GamePhase.SecondBoss);
-                break;
-            case GamePhase.SecondBoss:
-                ChangePhase(GamePhase.FinalRun);
-                break;
-            case GamePhase.FinalRun:
-                ChangePhase(GamePhase.ThirdBoss);
-                break;
-            case GamePhase.ThirdBoss:
-                ChangePhase(GamePhase.Victory);
-                break;
+            SetPhase(currentPhaseIndex + 1);
         }
-    }
-
-    private float GetDurationForPhase(GamePhase phase)
-    {
-        return phase switch
+        else
         {
-            GamePhase.Warmup => warmupDuration, 
-            GamePhase.FirstBoss => firstBossDuration, 
-            GamePhase.FirstPostBoss => firstPostBossDuration, 
-            GamePhase.SecondBoss => secondBossDuration,
-            GamePhase.FinalRun => finalRunDuration, 
-            GamePhase.ThirdBoss => thirdBossDuration, 
-            _ => 0f
-        };
+            StopLevel();
+            Debug.Log("[LevelManager] Все фазы пройдены! Победа!");
+        }
     }
 }

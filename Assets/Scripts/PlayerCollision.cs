@@ -29,7 +29,7 @@ public class PlayerCollision : MonoBehaviour
         {
             healthSystem = GameManager.Instance.Health;
         }
-        GameManager.Instance.onPlay.AddListener(ActivatePlayer);
+        GameManager.onPlay += ActivatePlayer;
     }
 
     private void ActivatePlayer()
