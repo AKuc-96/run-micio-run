@@ -233,12 +233,6 @@ MonoBehaviour:
   data:
     highscore: 0
   isPlaying: 0
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onGameOver:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &329911661
 Transform:
   m_ObjectHideFlags: 0
@@ -2084,6 +2078,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6902f6870651de448abfa79f54653e73, type: 2}
   - {fileID: 11400000, guid: f5595c6c24db80e4a91f61913d83d743, type: 2}
   - {fileID: 11400000, guid: ae4e0cef8a5fd934895ebdad31ff4fdc, type: 2}
+  - {fileID: 11400000, guid: 5daade0e7b236cb458bda815fa35d946, type: 2}
 --- !u!4 &1188521535
 Transform:
   m_ObjectHideFlags: 0
