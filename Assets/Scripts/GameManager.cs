@@ -47,6 +47,16 @@ public class GameManager : MonoBehaviour
             data = new Data();
     }
 
+    private void OnEnable()
+    {
+        LevelManager.OnPhaseChanged += HandlePhaseChanged;
+    }
+
+    private void OnDisable()
+    {
+        LevelManager.OnPhaseChanged -= HandlePhaseChanged;
+    } 
+
     private void Update()
     {
         if (isPlaying)
@@ -64,6 +74,14 @@ public class GameManager : MonoBehaviour
         }
 
         onPlay.Invoke();
+    }
+
+    internal void HandlePhaseChanged(PhaseConfig newPhase)
+    {
+        if (newPhase.SpawnInterval <= 0f && !newPhase.IsBossPhase)
+        {
+            isPlaying = false;
+        }
     }
 
     public void GameOver()
