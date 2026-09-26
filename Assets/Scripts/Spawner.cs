@@ -53,7 +53,7 @@ public class Spawner : MonoBehaviour
     }
     private void Update()
     {
-        if (GameManager.Instance.isPlaying)
+        if (GameManager.Instance?.isPlaying == true)
         {
             timeAlive += Time.deltaTime;
 
@@ -74,7 +74,7 @@ public class Spawner : MonoBehaviour
 
     private void SpawnLoop()
     {
-        if (_currentPhase == null || _currentPhase.IsBossPhase)
+        if (_currentPhase == null || _currentPhase.IsBossPhase || _obstacleSpawnTime <= 0f)
             return;
         
         timeUntilObstacleSpawn += Time.deltaTime;
@@ -143,7 +143,7 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void HandlePhaseChanged(PhaseConfig config)
+    internal void HandlePhaseChanged(PhaseConfig config)
     {
         _currentPhase = config;
         _obstacleSpeed = config.ObstacleSpeed;

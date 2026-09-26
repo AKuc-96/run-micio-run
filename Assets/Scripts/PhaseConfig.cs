@@ -21,5 +21,11 @@ public class PhaseConfig : ScriptableObject
     public GameObject BossPrefab => bossPrefab;
     public float PhaseDuration => phaseDuration; 
     public float ObstacleSpeed => obstacleSpeed; 
-    public bool IsBossPhase => isBossPhase;
+    public bool IsBossPhase => isBossPhase; 
+
+    internal void InitForTest(float interval, bool isBoss)
+    {
+        spawnInterval = interval;
+        isBossPhase = isBoss;
+    }
 }
