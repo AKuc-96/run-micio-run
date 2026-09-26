@@ -9,8 +9,8 @@ public class HealthSystem
     public int MaxLives { get; private set; }
     public int BonusCoins { get; private set; }
 
-    public UnityEvent<int> onHealthChanged = new (); 
-    public UnityEvent<int> onAddBonuses = new ();
+    public static event Action<int> onHealthChanged; 
+    public static event Action<int> onAddBonuses;
 
     public HealthSystem (int initialLives = 1, int maxLives = 9)
     {
