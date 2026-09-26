@@ -16,6 +16,8 @@ public class BossMovement : MonoBehaviour
     private bool isRetreating = false; 
     public bool hasStopped = false;
 
+    public bool IsRetrating => isRetreating;
+
     private void OnEnable()
     {
         LevelManager.OnPhaseChanged += HandlePhaseChanged;

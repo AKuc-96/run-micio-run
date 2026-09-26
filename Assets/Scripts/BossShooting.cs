@@ -39,7 +39,7 @@ public class BossShooting : MonoBehaviour
 
     private void Shoot()
     {
-        if (!GameManager.Instance.isPlaying)
+        if (!GameManager.Instance.isPlaying || bossMovement.IsRetrating)
         {
             return;
         }
