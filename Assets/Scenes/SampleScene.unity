@@ -227,8 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4d8dec156129c24ea3d138eb9c39d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialLives: 1
-  maxLives: 9
+  playerConfig: {fileID: 11400000, guid: 269c851bb66b07c4f97e46c3e72043a5, type: 2}
   currentScore: 0
   data:
     highscore: 0
@@ -1767,16 +1766,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b45652a3e625dc408894de7b1c0047c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerConfig: {fileID: 11400000, guid: 269c851bb66b07c4f97e46c3e72043a5, type: 2}
   rb: {fileID: 917522475}
   GFX: {fileID: 549089884}
-  jumpForce: 15
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   feetPos: {fileID: 1650494485}
-  groundDistance: 0.25
-  jumpTime: 0.3
-  crouchHeight: 0.5
 --- !u!114 &917522478
 MonoBehaviour:
   m_ObjectHideFlags: 0

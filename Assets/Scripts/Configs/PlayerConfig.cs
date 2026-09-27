@@ -15,7 +15,7 @@ public class PlayerConfig : ScriptableObject
     [Header("Crouch Settings")]
     [SerializeField] private float crouchHeight = 0.5f;
 
-    public int InitialLIves => initialLives;
+    public int InitialLives => initialLives;
     public int MaxLives => maxLives;
     public float JumpForce => jumpForce;
     public float GroundDistance => groundDistance;

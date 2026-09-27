@@ -17,15 +17,14 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-        Health = new HealthSystem(initialLives, maxLives);
+        Health = new HealthSystem(playerConfig.InitialLives, playerConfig.MaxLives);
         HealthSystem.Instance = Health;
     }
 
     #endregion
 
-    [Header("Health Settings")]
-    [SerializeField] private int initialLives = 1;
-    [SerializeField] private int maxLives = 9;
+    [Header("Configuration")]
+    [SerializeField] private PlayerConfig playerConfig;
 
     [Header("Game Data & Score")]
     public float currentScore = 0f;
@@ -60,7 +59,7 @@ public class GameManager : MonoBehaviour
 
         if (Health != null)
         {
-            Health.ResetLives(initialLives);
+            Health.ResetLives(playerConfig.InitialLives);
         }
 
         onPlay.Invoke();
