@@ -34,7 +34,9 @@ public class Spawner : MonoBehaviour
 
     private PhaseConfig _currentPhase;
     
-    private UnityEngine.Vector3 stopAt = new(6, -3, 0);
+    private UnityEngine.Vector3 stopAt = new(6, -3, 0); 
+
+    private float _currentExtraLifeSpawnChance; 
     
     private void OnEnable()
     {
@@ -145,6 +147,7 @@ public class Spawner : MonoBehaviour
 
     internal void HandlePhaseChanged(PhaseConfig config)
     {
+        isExtraLifeSpawned = false;
         _currentPhase = config;
         _obstacleSpeed = config.ObstacleSpeed;
         _obstacleSpawnTime = config.SpawnInterval; 
@@ -171,6 +174,17 @@ public class Spawner : MonoBehaviour
         obstacleRB.linearVelocity = UnityEngine.Vector2.left * _obstacleSpeed; 
         
         countSpawn += 1;
+
+        if (_currentPhase.CanSpawnExtraLife)
+        {
+           _currentExtraLifeSpawnChance = UnityEngine.Random.Range(0f, 100f);
+
+           if(_currentExtraLifeSpawnChance <= _currentPhase.ExtraLifeSpawnChance)
+            {
+                GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
+                spawnedExtraLife.transform.parent = obstacleParent;
+            }
+        }
     } 
 
     public void BossSpawn()
