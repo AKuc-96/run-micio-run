@@ -37,6 +37,7 @@ public class Spawner : MonoBehaviour
     private UnityEngine.Vector3 stopAt = new(6, -3, 0); 
 
     private float _currentExtraLifeSpawnChance; 
+    private float _phaseTimer;
     
     private void OnEnable()
     {
@@ -52,12 +53,14 @@ public class Spawner : MonoBehaviour
     {
         GameManager.onGameOver += ClearObstacles;
         GameManager.onPlay += ResetFactors;
+        _phaseTimer = 0f;
     }
     private void Update()
     {
         if (GameManager.Instance?.isPlaying == true)
         {
             timeAlive += Time.deltaTime;
+            _phaseTimer += Time.deltaTime;
 
             //CalculateFactors();
             
@@ -65,11 +68,16 @@ public class Spawner : MonoBehaviour
 
             //BossSpawn(); 
 
-            ExtraLifeSpawn();
-
             if (isBossCreated && spawnedBoss == null)
             {
                 ResetLoopAfterBoss();
+            }
+
+            if (_currentPhase != null && !_currentPhase.IsBossPhase && _phaseTimer >= (_currentPhase.PhaseDuration - 5.0f) && !isExtraLifeSpawned)
+            {
+                GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
+                spawnedExtraLife.transform.parent = obstacleParent; 
+                isExtraLifeSpawned = true;
             }
         }
     }
@@ -87,26 +95,6 @@ public class Spawner : MonoBehaviour
                 timeUntilObstacleSpawn = 0f; 
             } 
     } 
-
-    private void ExtraLifeSpawn()
-    {
-        if (timeAlive >= 15 && timeAlive <= 20 && !isExtraLifeSpawned)
-        {
-            GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
-            spawnedExtraLife.transform.parent = obstacleParent;
-            
-            Rigidbody2D extraLifeRB = spawnedExtraLife.GetComponent<Rigidbody2D>();
-
-            if (extraLifeRB != null)
-            {
-                extraLifeRB.linearVelocity = Vector2.left * _obstacleSpeed;
-            }
-
-            isExtraLifeSpawned = true;
-            Debug.Log("Дополнительная жизнь появилась!");
-        }
-
-    }
 
     private void ResetLoopAfterBoss()
     {
@@ -147,6 +135,7 @@ public class Spawner : MonoBehaviour
 
     internal void HandlePhaseChanged(PhaseConfig config)
     {
+        _phaseTimer = 0f;
         isExtraLifeSpawned = false;
         _currentPhase = config;
         _obstacleSpeed = config.ObstacleSpeed;
