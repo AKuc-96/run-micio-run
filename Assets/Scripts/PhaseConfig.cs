@@ -28,9 +28,10 @@ public class PhaseConfig : ScriptableObject
     public bool CanSpawnExtraLife => canSpawnExtraLife;
     public float ExtraLifeSpawnChance => extraLifeSpawnChance;
 
-    internal void InitForTest(float interval, bool isBoss)
+    internal void InitForTest(float interval, bool isBoss, float phaseIsLong = 10f)
     {
         spawnInterval = interval;
         isBossPhase = isBoss;
+        phaseDuration = phaseIsLong;
     }
 }

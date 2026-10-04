@@ -55,30 +55,39 @@ public class Spawner : MonoBehaviour
         GameManager.onPlay += ResetFactors;
         _phaseTimer = 0f;
     }
-    private void Update()
+    internal void Update()
     {
         if (GameManager.Instance?.isPlaying == true)
         {
-            timeAlive += Time.deltaTime;
-            _phaseTimer += Time.deltaTime;
+            Tick(Time.deltaTime);
+        }
+    }
+
+    internal void Tick(float deltaTime)
+    {
+        timeAlive += deltaTime;
+        _phaseTimer += deltaTime;
 
             //CalculateFactors();
             
-            SpawnLoop(); 
+        SpawnLoop(); 
 
             //BossSpawn(); 
 
-            if (isBossCreated && spawnedBoss == null)
-            {
-                ResetLoopAfterBoss();
-            }
+        if (isBossCreated && spawnedBoss == null)
+        {
+            ResetLoopAfterBoss();
+        }
 
-            if (_currentPhase != null && !_currentPhase.IsBossPhase && _phaseTimer >= (_currentPhase.PhaseDuration - 5.0f) && !isExtraLifeSpawned)
+        if (_currentPhase != null && !_currentPhase.IsBossPhase && _phaseTimer >= (_currentPhase.PhaseDuration - 5.0f) && !isExtraLifeSpawned)
+        {
+            if (extraLifePrefab != null)
             {
                 GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
                 spawnedExtraLife.transform.parent = obstacleParent; 
-                isExtraLifeSpawned = true;
             }
+            
+            isExtraLifeSpawned = true;
         }
     }
 

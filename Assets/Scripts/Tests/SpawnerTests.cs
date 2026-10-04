@@ -59,4 +59,20 @@ public class SpawnerTests
         Assert.AreEqual(0f, _spawner.PhaseTimer, "Таймер фазы должен обнуляться при смене фазы!");
         Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Флаг спавна жизни должен сбрасываться в false!");
     }
+
+    [Test]
+    public void Update_SpawnsExtraLife_WhenFiveSecondsRemainInNonBossPhase()
+    {
+        PhaseConfig config = ScriptableObject.CreateInstance<PhaseConfig>();
+        config.InitForTest(interval: 2f, isBoss: false, phaseIsLong: 10f);
+
+        _spawner.HandlePhaseChanged(config);
+
+        _spawner.Tick(4.9f);
+        Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Жизнь НЕ должна спавниться раньше, чем за 5 секунд до конца фазы!");
+
+        _spawner.Tick(0.2f);
+
+        Assert.IsTrue(_spawner.IsExtraLifeSpawned, "Жизнь ДОЛЖНА заспавниться за 5 секунд до конца фазы!");
+    }
 }
