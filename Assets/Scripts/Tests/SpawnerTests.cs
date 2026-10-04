@@ -75,4 +75,17 @@ public class SpawnerTests
 
         Assert.IsTrue(_spawner.IsExtraLifeSpawned, "Жизнь ДОЛЖНА заспавниться за 5 секунд до конца фазы!");
     }
+
+    [Test]
+    public void Tick_DoesNotSpawnExtraLife_DuringBossPhase()
+    {
+        PhaseConfig bossConfig = ScriptableObject.CreateInstance<PhaseConfig>();
+        bossConfig.InitForTest(interval: 2f, isBoss: true, phaseIsLong: 10f);
+        
+        _spawner.HandlePhaseChanged(bossConfig);
+
+        _spawner.Tick(9.9f);
+
+        Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Дополнительная жизнь НЕ должна спавниться на фазе босса!");
+    }
 }
