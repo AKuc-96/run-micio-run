@@ -185,4 +185,7 @@ public class Spawner : MonoBehaviour
             isBossCreated = true;
         }
     }
+
+    public float PhaseTimer => _phaseTimer;
+    public bool IsExtraLifeSpawned => isExtraLifeSpawned;
 }

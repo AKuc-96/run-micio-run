@@ -5,6 +5,28 @@ using UnityEngine.TestTools;
 
 public class SpawnerTests
 {
+
+    private GameObject _spawnerObject;
+    private Spawner _spawner;
+
+    [SetUp]
+
+    public void SetUp()
+    {
+        _spawnerObject = new GameObject("TestSpawner");
+        _spawner = _spawnerObject.AddComponent<Spawner>();
+    }
+
+    [TearDown]
+
+    public void TearDown()
+    {
+        if (_spawnerObject != null)
+        {
+            Object.DestroyImmediate(_spawnerObject);
+        }
+    }
+
     [UnityTest]
     public IEnumerator Spawner_ShouldNotSpawnObstacles_DuringVictoryPhase()
     {
@@ -24,5 +46,17 @@ public class SpawnerTests
 
         Object.Destroy(spawnerObject); 
 
+    }
+
+    [Test]
+    public void HandlePhaseChanged_ResetTimeAndExtraLifeFlag()
+    {
+        PhaseConfig config = ScriptableObject.CreateInstance<PhaseConfig>();
+        config.InitForTest(2f, false);
+
+        _spawner.HandlePhaseChanged(config);
+
+        Assert.AreEqual(0f, _spawner.PhaseTimer, "Таймер фазы должен обнуляться при смене фазы!");
+        Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Флаг спавна жизни должен сбрасываться в false!");
     }
 }
