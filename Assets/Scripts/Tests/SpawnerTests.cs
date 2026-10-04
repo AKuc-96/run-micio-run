@@ -88,4 +88,34 @@ public class SpawnerTests
 
         Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Дополнительная жизнь НЕ должна спавниться на фазе босса!");
     }
+
+    [Test]
+    public void SpawnExtraLife_Spawns_WhenRandomIsWithinChance()
+    {
+        PhaseConfig config = ScriptableObject.CreateInstance<PhaseConfig>();
+        config.InitForTest(interval: 2f, isBoss: false, phaseIsLong: 10f, weCanSpawnExtraLife: true);
+        
+        _spawner.HandlePhaseChanged(config);
+
+        _spawner.SetRandomGeneratorForTest((min, max) => 10.0f);
+
+        _spawner.Tick(2.1f);
+
+        Assert.IsTrue(_spawner.IsExtraLifeSpawned, "Жизнь должна заспавниться при успешном броске рандома!");
+    }
+
+    [Test]
+    public void SpawnExtraLife_DoesNotSpawn_WhenRandomExceedsChance()
+    {
+        PhaseConfig config = ScriptableObject.CreateInstance<PhaseConfig>();
+        config.InitForTest(interval: 2f, isBoss: false, phaseIsLong: 10f);
+
+        _spawner.HandlePhaseChanged(config);
+
+        _spawner.SetRandomGeneratorForTest((min, max) => 50.0f);
+
+        _spawner.Tick(2.1f);
+
+        Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Жизнь НЕ должна спавниться, если рандом больше шанса!");
+    }
 }

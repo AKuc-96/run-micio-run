@@ -3,6 +3,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Spawner : MonoBehaviour
@@ -70,7 +71,7 @@ public class Spawner : MonoBehaviour
 
             //CalculateFactors();
             
-        SpawnLoop(); 
+        SpawnLoop(deltaTime); 
 
             //BossSpawn(); 
 
@@ -91,12 +92,12 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void SpawnLoop()
+    private void SpawnLoop(float deltaTime)
     {
         if (_currentPhase == null || _currentPhase.IsBossPhase || _obstacleSpawnTime <= 0f)
             return;
         
-        timeUntilObstacleSpawn += Time.deltaTime;
+        timeUntilObstacleSpawn += deltaTime;
 
         if (timeUntilObstacleSpawn >= _obstacleSpawnTime)
             {
@@ -163,24 +164,33 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
-        GameObject obstacleToSpawn = obstaclePrefabs[UnityEngine.Random.Range(0, obstaclePrefabs.Length)];
+        if (obstaclePrefabs != null && obstaclePrefabs.Length > 0)
+        {
+            GameObject obstacleToSpawn = obstaclePrefabs[UnityEngine.Random.Range(0, obstaclePrefabs.Length)];
+            GameObject spawnedObstacle = Instantiate(obstacleToSpawn, transform.position, Quaternion.identity);
+            spawnedObstacle.transform.parent = obstacleParent; 
 
-        GameObject spawnedObstacle = Instantiate(obstacleToSpawn, transform.position, UnityEngine.Quaternion.identity);
-        spawnedObstacle.transform.parent = obstacleParent; 
+            if (spawnedObstacle.TryGetComponent<Rigidbody2D>(out var obstacleRB))
+            {
+                obstacleRB.linearVelocity = UnityEngine.Vector2.left * _obstacleSpeed; 
+            }
+        }
 
-        Rigidbody2D obstacleRB = spawnedObstacle.GetComponent<Rigidbody2D>();
-        obstacleRB.linearVelocity = UnityEngine.Vector2.left * _obstacleSpeed; 
-        
         countSpawn += 1;
 
-        if (_currentPhase.CanSpawnExtraLife)
+        if (_currentPhase != null && _currentPhase.CanSpawnExtraLife && !isExtraLifeSpawned)
         {
-           _currentExtraLifeSpawnChance = UnityEngine.Random.Range(0f, 100f);
+            _currentExtraLifeSpawnChance = _randomRange(0f, 100f);
 
-           if(_currentExtraLifeSpawnChance <= _currentPhase.ExtraLifeSpawnChance)
+            if (_currentExtraLifeSpawnChance <= _currentPhase.ExtraLifeSpawnChance)
             {
-                GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
-                spawnedExtraLife.transform.parent = obstacleParent;
+                if (extraLifePrefab != null)
+                {
+                    GameObject spawnedExtraLife = Instantiate(extraLifePrefab, transform.position, Quaternion.identity);
+                    spawnedExtraLife.transform.parent = obstacleParent;
+                }  
+            
+                isExtraLifeSpawned = true;
             }
         }
     } 
@@ -197,4 +207,11 @@ public class Spawner : MonoBehaviour
 
     public float PhaseTimer => _phaseTimer;
     public bool IsExtraLifeSpawned => isExtraLifeSpawned;
+
+    private System.Func<float, float, float> _randomRange = Random.Range; 
+
+    internal void SetRandomGeneratorForTest(System.Func<float, float, float> customRandom)
+    {
+        _randomRange = customRandom;
+    }
 }
