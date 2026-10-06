@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -93,14 +94,30 @@ public class LevelManager : MonoBehaviour
 
     public void AdvanceToNextPhase()
     {
-        if (currentPhaseIndex + 1 < levelPhases.Length)
+        int nextIndex = currentPhaseIndex + 1;
+        if (nextIndex < levelPhases.Length)
         {
-            SetPhase(currentPhaseIndex + 1);
+            _timePassed = 0f;
+
+            if (levelPhases[currentPhaseIndex].IsBossPhase)
+            {
+                StartCoroutine(WaitAndSetPhase(nextIndex));
+            }
+            else
+            {
+                SetPhase(nextIndex); 
+            }
         }
         else
         {
             StopLevel();
             Debug.Log("[LevelManager] Все фазы пройдены! Победа!");
         }
+    }
+
+    private IEnumerator WaitAndSetPhase(int nextPhaseIndex)
+    {
+        yield return new WaitForSeconds(3f);
+        SetPhase(nextPhaseIndex); 
     }
 }
