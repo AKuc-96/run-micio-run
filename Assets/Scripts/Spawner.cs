@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviour
         LevelManager.OnPhaseChanged += HandlePhaseChanged;
     }
 
-    private void OnDiasble()
+    private void OnDisable()
     {
         LevelManager.OnPhaseChanged -= HandlePhaseChanged;
     }
@@ -72,8 +72,6 @@ public class Spawner : MonoBehaviour
             //CalculateFactors();
             
         SpawnLoop(deltaTime); 
-
-            //BossSpawn(); 
 
         if (isBossCreated && spawnedBoss == null)
         {
@@ -198,10 +196,11 @@ public class Spawner : MonoBehaviour
     public void BossSpawn()
     {
 
-        if (countSpawn >= 10 && !isBossCreated)
+        if (bossPrefab != null && !isBossCreated)
         {
             spawnedBoss = Instantiate(bossPrefab, new UnityEngine.Vector3(12, -3, 0), UnityEngine.Quaternion.identity);
-            isBossCreated = true;
+            isBossCreated = true; 
+            Debug.Log("[Spawner] Босс успешно заспавнен!");
         }
     }
 
