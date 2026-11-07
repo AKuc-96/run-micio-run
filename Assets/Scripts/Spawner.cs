@@ -15,13 +15,13 @@ public class Spawner : MonoBehaviour
     [Header("Extra Life Settings")]
     [SerializeField] private GameObject extraLifePrefab;
     private bool isExtraLifeSpawned = false;
-    public float obstacleSpawnTime = 2f;
     [Range(0, 1)] public float obstacleSpawnTimeFactor = 0.1f;
     public float obstacleSpeed = 1f; 
     public float bossSpeed = 2f;
     [Range(0, 1)] public float obstacleSpeedFactor = 0.2f; 
 
 
+    private float _spawnDelayTime;
     private float _obstacleSpawnTime;
     private float _obstacleSpeed;
     private float timeUntilObstacleSpawn;
@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviour
         LevelManager.OnPhaseChanged += HandlePhaseChanged;
     }
 
-    private void OnDiasble()
+    private void OnDisable()
     {
         LevelManager.OnPhaseChanged -= HandlePhaseChanged;
     }
@@ -73,8 +73,6 @@ public class Spawner : MonoBehaviour
             
         SpawnLoop(deltaTime); 
 
-            //BossSpawn(); 
-
         if (isBossCreated && spawnedBoss == null)
         {
             ResetLoopAfterBoss();
@@ -97,6 +95,12 @@ public class Spawner : MonoBehaviour
         if (_currentPhase == null || _currentPhase.IsBossPhase || _obstacleSpawnTime <= 0f)
             return;
         
+        if (_spawnDelayTime > 0f && _currentPhase.PhaseCounter != 1)
+        {
+            _spawnDelayTime -= deltaTime; 
+            return;
+        }
+
         timeUntilObstacleSpawn += deltaTime;
 
         if (timeUntilObstacleSpawn >= _obstacleSpawnTime)
@@ -123,7 +127,6 @@ public class Spawner : MonoBehaviour
 
     private void CalculateFactors()
     {
-        _obstacleSpawnTime = obstacleSpawnTime / Mathf.Pow(timeAlive, obstacleSpawnTimeFactor);
         _obstacleSpeed = obstacleSpeed * Mathf.Pow(timeAlive, obstacleSpeedFactor);
     }
 
@@ -134,7 +137,6 @@ public class Spawner : MonoBehaviour
         timeUntilObstacleSpawn = 0f; 
         isBossCreated = false; 
         isExtraLifeSpawned = false;
-        _obstacleSpawnTime = obstacleSpawnTime;
         _obstacleSpeed = obstacleSpeed;
 
         if (spawnedBoss != null)
@@ -154,13 +156,12 @@ public class Spawner : MonoBehaviour
         {
             BossSpawn();
         }
+        else
+        {
+            _spawnDelayTime = 3f;
+        }
         Debug.Log($"[Spawner] Применена фаза! Скорость: {_obstacleSpeed}, Интервал: {_obstacleSpawnTime}");
     }
-
-    // private void Destroy(System.Func<GameObject> gameObject)
-    // {
-    //     throw new System.NotImplementedException();
-    // }
 
     private void Spawn()
     {
@@ -198,15 +199,16 @@ public class Spawner : MonoBehaviour
     public void BossSpawn()
     {
 
-        if (countSpawn >= 10 && !isBossCreated)
+        if (bossPrefab != null && !isBossCreated)
         {
             spawnedBoss = Instantiate(bossPrefab, new UnityEngine.Vector3(12, -3, 0), UnityEngine.Quaternion.identity);
-            isBossCreated = true;
+            isBossCreated = true; 
+            Debug.Log("[Spawner] Босс успешно заспавнен!");
         }
     }
 
     public float PhaseTimer => _phaseTimer;
-    public bool IsExtraLifeSpawned => isExtraLifeSpawned;
+    public bool IsExtraLifeSpawned => isExtraLifeSpawned; 
 
     private System.Func<float, float, float> _randomRange = Random.Range; 
 

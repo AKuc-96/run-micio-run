@@ -21,3 +21,6 @@ MonoBehaviour:
   isBossPhase: 0
   phaseDuration: 60
   obstacleSpeed: 3
+  canSpawnExtraLife: 0
+  extraLifeSpawnChance: 20
+  phaseCounter: 1

@@ -118,4 +118,18 @@ public class SpawnerTests
 
         Assert.IsFalse(_spawner.IsExtraLifeSpawned, "Жизнь НЕ должна спавниться, если рандом больше шанса!");
     }
+
+    [Test]
+    public void HandlePhaseChnaged_NonBossPhase_SetsNegativeSpawnTimeDelay()
+    {
+        PhaseConfig nonBossPhase = ScriptableObject.CreateInstance<PhaseConfig>();
+        nonBossPhase.InitForTest(interval: 2f, isBoss: false);
+
+        _spawner.HandlePhaseChanged(nonBossPhase);
+
+        _spawner.Tick(2.0f);
+
+        Obstacle[] spawnedObstacles = Object.FindObjectsByType<Obstacle>(FindObjectsSortMode.None);
+        Assert.AreEqual(0, spawnedObstacles.Length, "Препятствия не должны спавниться во время 3-секундной задержки!");
+    }
 }

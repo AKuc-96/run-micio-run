@@ -17,7 +17,8 @@ public class PhaseConfig : ScriptableObject
     [SerializeField] private float obstacleSpeed = 5f; 
     [Header("Extra life spawning")]
     [SerializeField] private bool canSpawnExtraLife;
-    [SerializeField] private float extraLifeSpawnChance = 20f;
+    [SerializeField] private float extraLifeSpawnChance = 20f; 
+    [SerializeField] private int phaseCounter;
 
     public float SpawnInterval => spawnInterval;
     public GameObject[] ObstaclePrefabs => obstaclePrefabs;
@@ -26,7 +27,9 @@ public class PhaseConfig : ScriptableObject
     public float ObstacleSpeed => obstacleSpeed; 
     public bool IsBossPhase => isBossPhase; 
     public bool CanSpawnExtraLife => canSpawnExtraLife;
-    public float ExtraLifeSpawnChance => extraLifeSpawnChance;
+    public float ExtraLifeSpawnChance => extraLifeSpawnChance; 
+
+    public float PhaseCounter => phaseCounter;
 
     internal void InitForTest(float interval, bool isBoss, float phaseIsLong = 10f, bool weCanSpawnExtraLife = true)
     {
