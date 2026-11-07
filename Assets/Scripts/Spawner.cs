@@ -95,9 +95,9 @@ public class Spawner : MonoBehaviour
         if (_currentPhase == null || _currentPhase.IsBossPhase || _obstacleSpawnTime <= 0f)
             return;
         
-        if (_spawnDelayTime > 0f)
+        if (_spawnDelayTime > 0f && _currentPhase.PhaseCounter != 1)
         {
-            _spawnDelayTime -= deltaTime;
+            _spawnDelayTime -= deltaTime; 
             return;
         }
 
