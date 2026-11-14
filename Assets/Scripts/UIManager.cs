@@ -70,10 +70,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
+    // private void OnDestroy()
+    // {
         
-    }
+    // }
+    
     public void PlayButtonHandler()
     {
         gm.StartGame();

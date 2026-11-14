@@ -15,7 +15,7 @@ public class BossShooting : MonoBehaviour
     // ссылка на скрипт с передвижением босса
     private BossMovement bossMovement;
 
-    private bool coordinatesSent = false;
+    // private bool coordinatesSent = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
