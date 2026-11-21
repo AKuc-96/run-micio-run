@@ -20,6 +20,8 @@ public class LevelManager : MonoBehaviour
     private float _timePassed = 0f;
     private bool _isPhaseActive = false; 
 
+    public float levelDuration;
+
     private void OnEnable()
     {
         GameManager.onPlay += StartLevel;
@@ -70,6 +72,16 @@ public class LevelManager : MonoBehaviour
         {
             Debug.LogError("[LevelManager] Массив levelPhases пуст!");
         }
+
+        SumOfPhaseDurations();
+    }
+    public void SumOfPhaseDurations()
+    {
+        foreach (PhaseConfig currentPhase in levelPhases)
+        {
+            levelDuration += currentPhase.PhaseDuration;
+        }
+        Debug.Log($"[LevelManager] Длительность всего уровня - {levelDuration} секунд");
     }
 
     public void StopLevel()
@@ -114,6 +126,7 @@ public class LevelManager : MonoBehaviour
             Debug.Log("[LevelManager] Все фазы пройдены! Победа!");
         }
     }
+
 
     private IEnumerator WaitAndSetPhase(int nextPhaseIndex)
     {
