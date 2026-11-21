@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour
     private float _spawnDelayTime;
     private float _obstacleSpawnTime;
     private float _obstacleSpeed;
-    // private float timeUntilObstacleSpawn;
+    private float timeUntilObstacleSpawn;
 
     private float timeAlive; 
 
@@ -101,20 +101,20 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        // timeUntilObstacleSpawn += deltaTime;
+        timeUntilObstacleSpawn += deltaTime;
 
-        // if (timeUntilObstacleSpawn >= _obstacleSpawnTime)
-        //     {
-        //         Spawn(); 
-        //         timeUntilObstacleSpawn = 0f; 
-        //     } 
+        if (timeUntilObstacleSpawn >= _obstacleSpawnTime)
+            {
+                Spawn(); 
+                timeUntilObstacleSpawn = 0f; 
+            } 
     } 
 
     private void ResetLoopAfterBoss()
     {
         countSpawn = 0;
         isBossCreated = false; 
-        // timeUntilObstacleSpawn = 0f;
+        timeUntilObstacleSpawn = 0f;
     }
 
     private void ClearObstacles()
